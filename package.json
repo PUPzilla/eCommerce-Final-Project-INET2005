@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/PUPzilla/eCommerce-Final-Project-INET2005/issues"
   },
-  "homepage": "https://github.com/PUPzilla/eCommerce-Final-Project-INET2005#readme"
+  "homepage": "https://github.com/PUPzilla/eCommerce-Final-Project-INET2005#readme",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
 }
