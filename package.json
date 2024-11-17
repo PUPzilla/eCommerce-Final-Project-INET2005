@@ -1,0 +1,22 @@
+{
+  "name": "yotastacos_api",
+  "version": "1.0.0",
+  "description": "Final Project (eCommerce Web App)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PUPzilla/eCommerce-Final-Project-INET2005.git"
+  },
+  "keywords": [
+    "INET2005"
+  ],
+  "author": "Gavin MacDonald",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PUPzilla/eCommerce-Final-Project-INET2005/issues"
+  },
+  "homepage": "https://github.com/PUPzilla/eCommerce-Final-Project-INET2005#readme"
+}
