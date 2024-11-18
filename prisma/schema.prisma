@@ -13,7 +13,7 @@ datasource db {
 model Product {
   product_id      Int     @id @default(autoincrement())
   name            String
-  desciption      String
+  desciption      String? //Description not necessary
   cost            Float
   image_filename  String
 }

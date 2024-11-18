@@ -1,17 +1,17 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import { comparePassword, hashPassword } from '../lib/utility';
+import { comparePassword, hashPassword } from '../lib/utility.js';
 
 const UserRouter = express.Router();
 
 const prisma = new PrismaClient();
 
-router.get('/users/all', (req, res) => {
+UserRouter.get('/users/all', (req, res) => {
     res.send('All Users Route');
 });
 
 //SignUp
-router.post('/users/signup', async (req, res) => {
+UserRouter.post('/users/signup', async (req, res) => {
     // User input
     const { email, password, first_name, last_name } = req.body;
 
@@ -43,10 +43,12 @@ router.post('/users/signup', async (req, res) => {
             last_name: last_name,
         },
     });
+
+
 });
 
 //Login
-router.post('users/login', async (req, res) => {
+UserRouter.post('users/login', async (req, res) => {
     
     const { email, password } = req.body;
 
@@ -72,18 +74,18 @@ router.post('users/login', async (req, res) => {
     }
 
     // Setup user session
-    req.session.user = existingUser.email;
+    // req.session.user = existingUser.email;
 
     res.send(`Login Route`);
 });
 
-//Logout
-router.post(`/users/logout`, (req, res) => {
+//Logout route
+UserRouter.post(`/users/logout`, (req, res) => {
     res.send(`Logout Route`);
 });
 
 //Get session
-router.get('/users/getsession', (req, res) => {
+UserRouter.get('/users/getsession/:id', (req, res) => {
     res.send(`Get User Session`);
 });
 
