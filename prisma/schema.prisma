@@ -10,16 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//
+// Models
+//
+
 model Product {
-  product_id      Int     @id @default(autoincrement())
+  id              Int     @id @default(autoincrement())
   name            String
-  desciption      String? //Description not necessary
+  description     String? //Description not necessary
   cost            Float
-  image_filename  String
+  filename        String
 }
 
 model Customer {
-  customer_id     Int     @id     @default(autoincrement())
+  id              Int     @id     @default(autoincrement())
   email           String  @unique
   password        String
   first_name      String
