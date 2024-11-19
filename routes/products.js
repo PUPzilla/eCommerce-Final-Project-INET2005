@@ -68,4 +68,19 @@ ProdRouter.post('/purchase/:id', async (req, res) => {
     res.send('Purchase route');
 });
 
+ProdRouter.delete('/delete/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+
+    const product = await prisma.product.findUnique({
+        where: {
+            id: parseInt(id)
+        }
+    });
+
+    await prisma.product.delete({ where: { id }});
+
+    res.send('Deleted');
+
+});
+
 export default ProdRouter;
