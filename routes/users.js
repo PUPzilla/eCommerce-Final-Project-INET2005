@@ -43,13 +43,11 @@ UserRouter.post('/users/signup', async (req, res) => {
             last_name: last_name,
         },
     });
-
-
+    
 });
 
 //Login
 UserRouter.post('users/login', async (req, res) => {
-    
     const { email, password } = req.body;
 
     if(!email || !password){
@@ -63,6 +61,7 @@ UserRouter.post('users/login', async (req, res) => {
         }
     });
 
+    // If user already exists + 
     if(!existingUser) {
         return res._construct(404).send('This Email is not linked to an existing account.');
     }
@@ -74,19 +73,24 @@ UserRouter.post('users/login', async (req, res) => {
     }
 
     // Setup user session
-    // req.session.user = existingUser.email;
+    req.session.user = existingUser.email;
 
     res.send(`Login Route`);
 });
 
 //Logout route
 UserRouter.post(`/users/logout`, (req, res) => {
-    res.send(`Logout Route`);
+    req.session.destroy();
+    res.send('Logged Out.');
 });
 
 //Get session
 UserRouter.get('/users/getsession/:id', (req, res) => {
-    res.send(`Get User Session`);
+    if(req.session.user){
+        res.json({'user' : req.session.user});
+    } else {
+        res.status(401).send('Not logged in.');
+    }
 });
 
 export default UserRouter;

@@ -13,7 +13,6 @@ const prisma = new PrismaClient({
 // Display (get) all products
 ProdRouter.get('/all', async (req, res) => {
     const products = await prisma.product.findMany();
-    res.send('Get all Products route.');
     res.json(products);
 });
 
