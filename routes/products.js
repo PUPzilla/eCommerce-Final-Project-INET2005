@@ -1,22 +1,25 @@
 import express from 'express';
 import { PrismaClient } from "@prisma/client";
+import UserRouter from './users';
 
 const ProdRouter = express.Router();
 
-//Prisma
+const UserRouter = UserRouter();
+
+//  Prisma
 const prisma = new PrismaClient({
     log: ['info', 'query', 'warn', 'error'],
 });
 
-// Routes
+//  Routes
 
-// Display (get) all products
+//  Display (get) all products
 ProdRouter.get('/all', async (req, res) => {
     const products = await prisma.product.findMany();
     res.json(products);
 });
 
-// Display product by its ID#
+//  Display product by its ID#
 ProdRouter.get('/:id', async (req, res) => {
     const id = req.params.id;
 
@@ -37,7 +40,7 @@ ProdRouter.get('/:id', async (req, res) => {
     }
 });
 
-// Create new product entry
+//  Create new product entry
 ProdRouter.post('/create', async (req, res) => {
     const { filename, name, description, cost } = req.body;
 
@@ -62,9 +65,25 @@ ProdRouter.post('/create', async (req, res) => {
     }
 });
 
-// Purchase product
+//  Purchase product
 ProdRouter.post('/purchase/:id', async (req, res) => {
-    res.send('Purchase route');
+    const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total } = req.body;
+    const id = parseInt(req.params.id);
+
+    const product = await prisma.product.findUnique({
+        where: {
+            id: id,
+        }
+    });
+
+    if(!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire|| !credit_cvv) {
+        
+    }
+
+    cart.push(product.id);
+
+    console.log('Added: ', cart.find(product.id), ' to cart.');
+
 });
 
 ProdRouter.delete('/delete/:id', async (req, res) => {

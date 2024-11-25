@@ -15,15 +15,15 @@ datasource db {
 //
 
 model Product {
-  product_id      Int         @id @default(autoincrement())
+  id              Int         @id         @default(autoincrement())
   name            String
-  description     String? //Description not necessary
+  description     String?     //Description not necessary
   cost            Float
   filename        String
 }
 
 model Customer {
-  customer_id     Int         @id     @default(autoincrement())
+  id     Int         @id         @default(autoincrement())
   email           String      @unique
   password        String
   first_name      String
@@ -31,7 +31,7 @@ model Customer {
 }
 
 model Purchase {
-  purchase_id       Int       @purchase_id  @default(autoincrement())
+  purchase_id       Int       @id         @default(autoincrement())
   customer_id       Int
   street            String
   city              String
@@ -44,11 +44,11 @@ model Purchase {
   invoice_amt       Float
   invoice_tax       Float
   invoice_total     Float
-  order_date        DateTime  @default(now())
+  order_date        DateTime              @default(now())
 }
 
 model PurchaseItem {
-  purchase_id       Int
+  purchase_id       Int       @id         @default(autoincrement())
   product_id        Int
   quantity          Int
 }
