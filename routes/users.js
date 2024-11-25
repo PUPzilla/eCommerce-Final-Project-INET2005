@@ -2,6 +2,7 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import { comparePassword, hashPassword } from '../lib/utility.js';
 import PasswordValidator from 'password-validator';
+import session from 'express-session';
 
 const UserRouter = express.Router();
 
@@ -71,7 +72,7 @@ UserRouter.post('users/login', async (req, res) => {
     }
 
     //  Check that user exists
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.customer.findUnique({
         where: {
             email: email,
         }
@@ -89,7 +90,7 @@ UserRouter.post('users/login', async (req, res) => {
     }
 
     //  Setup user session
-    req.session.user = existingUser.email;
+    req.session.customer = existingUser.id;
 
     res.send(`Login Route`);
 });
