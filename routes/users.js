@@ -32,7 +32,7 @@ UserRouter.post('/signup', async (req, res) => {
     }
 
     //  Check for existing users
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.customer.findUnique({
         where: {
             email: email,
         }
@@ -51,7 +51,7 @@ UserRouter.post('/signup', async (req, res) => {
     const hashed_pass = await hashPassword(password);
 
     //  Add user to DB
-    const user = await prisma.user.create({
+    const user = await prisma.customer.create({
         data: {
             email: email,
             password: hashed_pass,
@@ -89,7 +89,7 @@ UserRouter.post('/login', async (req, res) => {
         return res.status(401).send('Invalid Password');
     }
 
-    //  Setup user session'
+    //  Setup user session
     req.session.customer = existingUser;
 
     res.send('Login Successful.');
@@ -103,8 +103,8 @@ UserRouter.post('/logout', (req, res) => {
 
 //  Get session
 UserRouter.get('/getsession/:id', (req, res) => {
-    if(req.session.user){
-        res.json({'user' : req.session.user});
+    if(req.session.customer){
+        res.json({'user' : req.session.customer});
     } else {
         res.status(401).send('Not logged in.');
     }

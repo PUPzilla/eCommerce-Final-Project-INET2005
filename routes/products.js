@@ -75,6 +75,8 @@ ProdRouter.post('/purchase/:id', authenticateSession, async (req, res) => {
         res.status(400).send('Error: Invalid ID number.');
     }
 
+    const customer_id = req.session.customer.customer_id;
+
     //  Find product
     const product = await prisma.product.findUnique({
         where: {
@@ -93,6 +95,7 @@ ProdRouter.post('/purchase/:id', authenticateSession, async (req, res) => {
 
     const newPurchase = await prisma.purchase.create({
         data: {
+            customer_id: customer_id,
             street: street,
             city: city,
             province: province,
@@ -104,7 +107,7 @@ ProdRouter.post('/purchase/:id', authenticateSession, async (req, res) => {
             invoice_amt: invoice_amt,
             invoice_tax: invoice_tax,
             invoice_total: invoice_total,
-        }
+        },
     });
 
     //  Create a new purchaseItem entry
