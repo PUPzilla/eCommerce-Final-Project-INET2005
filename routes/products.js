@@ -1,6 +1,6 @@
 import express from 'express';
 import { PrismaClient } from "@prisma/client";
-import { authenticateSession } from '../lib/utility';
+import { authenticateSession } from '../lib/utility.js';
 
 const ProdRouter = express.Router();
 
