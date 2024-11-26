@@ -2,7 +2,6 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import { comparePassword, hashPassword } from '../lib/utility.js';
 import PasswordValidator from 'password-validator';
-import session from 'express-session';
 
 const UserRouter = express.Router();
 
@@ -18,12 +17,12 @@ schema
 .has().lowercase()
 .has().digits(1);
 
-UserRouter.get('/users/all', (req, res) => {
+UserRouter.get('/all', (req, res) => {
     res.send('All Users Route');
 });
 
 //  SignUp
-UserRouter.post('/users/signup', async (req, res) => {
+UserRouter.post('/signup', async (req, res) => {
     //  User input
     const { email, password, first_name, last_name } = req.body;
 
@@ -64,9 +63,10 @@ UserRouter.post('/users/signup', async (req, res) => {
 });
 
 //  Login
-UserRouter.post('users/login', async (req, res) => {
+UserRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
+    //  Validate input
     if(!email || !password){
         return res.status(400).send('Missing a required field.');
     }
@@ -78,7 +78,7 @@ UserRouter.post('users/login', async (req, res) => {
         }
     });
 
-    //  If user already exists + 
+    //  If user already exists
     if(!existingUser) {
         return res._construct(404).send('This Email is not linked to an existing account.');
     }
@@ -89,20 +89,20 @@ UserRouter.post('users/login', async (req, res) => {
         return res.status(401).send('Invalid Password');
     }
 
-    //  Setup user session
-    req.session.customer = existingUser.id;
+    //  Setup user session'
+    req.session.customer = existingUser;
 
-    res.send(`Login Route`);
+    res.send('Login Successful.');
 });
 
 //  Logout route
-UserRouter.post(`/users/logout`, (req, res) => {
+UserRouter.post('/logout', (req, res) => {
     req.session.destroy();
     res.send('Logged Out.');
 });
 
 //  Get session
-UserRouter.get('/users/getsession/:id', (req, res) => {
+UserRouter.get('/getsession/:id', (req, res) => {
     if(req.session.user){
         res.json({'user' : req.session.user});
     } else {

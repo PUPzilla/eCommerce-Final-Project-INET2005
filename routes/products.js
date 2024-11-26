@@ -1,10 +1,8 @@
 import express from 'express';
 import { PrismaClient } from "@prisma/client";
-import UserRouter from './users';
+import { authenticateSession } from '../lib/utility';
 
 const ProdRouter = express.Router();
-
-const UserRouter = UserRouter();
 
 //  Prisma
 const prisma = new PrismaClient({
@@ -24,7 +22,7 @@ ProdRouter.get('/:id', async (req, res) => {
     const id = req.params.id;
 
     if(isNaN(id)){
-        return req.statusCode(400).json({ message: 'Invalid ID #.'});
+        return req.status(400).json({ message: 'Invalid ID #.'});
     }
 
     const product = await prisma.product.findUnique({
@@ -34,7 +32,7 @@ ProdRouter.get('/:id', async (req, res) => {
     });
 
     if(product) {
-        res.json(product);
+        res.json(product); 
     } else {
         res.status(404).json({message: 'Error: Product not found.'});
     }
@@ -59,6 +57,7 @@ ProdRouter.post('/create', async (req, res) => {
             },
         });
         res.json(newProduct);
+        
     } catch(error) {
         console.error('Error creating product:', error);
         res.status(500).json({ message: 'Internal server error'});
@@ -66,24 +65,63 @@ ProdRouter.post('/create', async (req, res) => {
 });
 
 //  Purchase product
-ProdRouter.post('/purchase/:id', async (req, res) => {
-    const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total } = req.body;
-    const id = parseInt(req.params.id);
+ProdRouter.post('/purchase/:id', authenticateSession, async (req, res) => {
+    //  Quantity is set to 1 by default
+    const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total, quantity = 1 } = req.body;
 
+    const id = req.params.id;
+
+    if(isNaN(id)){
+        res.status(400).send('Error: Invalid ID number.');
+    }
+
+    //  Find product
     const product = await prisma.product.findUnique({
         where: {
-            id: id,
+            id: parseInt(id),
         }
     });
 
-    if(!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire|| !credit_cvv) {
-        
+    if(!product){
+        return res.status(404).send('Error finding product. Could not find a product with provided ID.');
     }
 
-    cart.push(product.id);
+    //  Check that user submitted required info
+    if(!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire|| !credit_cvv) {
+        return res.status(400).send('Missing a required field.');
+    }
 
-    console.log('Added: ', cart.find(product.id), ' to cart.');
+    const newPurchase = await prisma.purchase.create({
+        data: {
+            street: street,
+            city: city,
+            province: province,
+            country: country,
+            postal_code: postal_code,
+            credit_card: credit_card,
+            credit_expire: credit_expire,
+            credit_cvv: credit_cvv,
+            invoice_amt: invoice_amt,
+            invoice_tax: invoice_tax,
+            invoice_total: invoice_total,
+        }
+    });
 
+    //  Create a new purchaseItem entry
+    const purchaseItem = await prisma.purchaseItem.create({
+        data: {
+            purchase_id: newPurchase.purchase_id,
+            product_id: product.id,
+            quantity: quantity,
+        }
+    });
+    
+    //  Add product to cart
+    req.session.cart.push(parseInt(id));
+
+    console.log(`Added ${id} to cart.`);
+
+    res.json(req.session.cart);
 });
 
 ProdRouter.delete('/delete/:id', async (req, res) => {
