@@ -90,9 +90,9 @@ UserRouter.post('/login', async (req, res) => {
     }
 
     //  Setup user session
-    req.session.customer = existingUser;
+    req.session.customer_id = existingUser.customer_id;
 
-    res.send('Login Successful.');
+    res.json({ message: 'Legged in as: ', customer_id: req.session.customer_id });
 });
 
 //  Logout route

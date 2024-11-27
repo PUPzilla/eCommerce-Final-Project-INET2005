@@ -31,14 +31,6 @@ app.use(session({
 app.use('/api/products/', ProdRouter);
 app.use('./api/users/', UserRouter);
 
-//  Cart stored in customer's session
-app.use((req, res, next) => {
-  if(!req.session.cart){//  Initialize an empty cart if one doesn't already exist
-    req.session.cart = [];
-  }
-  next();
-});
-
 app.listen(3000, () => {
   console.log(`app.js from YotasTacos listening on port: ${port}`);
 });

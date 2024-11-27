@@ -64,35 +64,30 @@ ProdRouter.post('/create', async (req, res) => {
     }
 });
 
-//  Purchase product
-ProdRouter.post('/purchase/:id', authenticateSession, async (req, res) => {
+//  Purchase product. 'authenticateSession' checks that a user is logged-in
+ProdRouter.post('/purchase', authenticateSession, async (req, res) => {
     //  Quantity is set to 1 by default
-    const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total, quantity = 1 } = req.body;
-
-    const id = req.params.id;
-
-    if(isNaN(id)){
-        res.status(400).send('Error: Invalid ID number.');
-    }
+    const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total} = req.body;
 
     const customer_id = req.session.customer.customer_id;
-
-    //  Find product
-    const product = await prisma.product.findUnique({
-        where: {
-            id: parseInt(id),
-        }
-    });
-
-    if(!product){
-        return res.status(404).send('Error finding product. Could not find a product with provided ID.');
-    }
 
     //  Check that user submitted required info
     if(!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire|| !credit_cvv) {
         return res.status(400).send('Missing a required field.');
     }
 
+    if(!cart || typeof cart !== 'string') {
+        return res.status(400).json({ error: 'Error getting cart data.'});
+    }
+
+    const prodIds = cart.split(',').reduce((acc, item) => {
+        const product_id = parseInt(item);
+        if(!product_id) return acc;
+        acc[product_id] = (acc[product_id] || 0 ) + 1;
+        return acc;
+    }, {});
+
+    //  Create a new purchase record
     const newPurchase = await prisma.purchase.create({
         data: {
             customer_id: customer_id,
@@ -111,20 +106,17 @@ ProdRouter.post('/purchase/:id', authenticateSession, async (req, res) => {
     });
 
     //  Create a new purchaseItem entry
-    const purchaseItem = await prisma.purchaseItem.create({
-        data: {
-            purchase_id: newPurchase.purchase_id,
-            product_id: product.id,
-            quantity: quantity,
-        }
+    const itemsForPurchase = Object.entries(prodIds).map(([product_id, quantity]) => ({
+        purchase_id: purchase.purchase_id,
+        product_id: parseInt(product_id),
+        quantity,
+    }));
+
+    await prisma.purchaseItem.createMany({
+        data: itemsForPurchase,
     });
-    
-    //  Add product to cart
-    req.session.cart.push(parseInt(id));
 
-    console.log(`Added ${id} to cart.`);
-
-    res.json(req.session.cart);
+    res.status(201).json({ message: 'Purchase was made successfully!' });
 });
 
 ProdRouter.delete('/delete/:id', async (req, res) => {
