@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom
 import './App.css';
 
 export default function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
