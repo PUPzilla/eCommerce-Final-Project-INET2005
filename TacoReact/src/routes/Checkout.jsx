@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import React from "react";
 
-export default function Checkout(){
+const Checkout = () => {
     return(
         <>
-        <h1>Checkout Route</h1>
+        <h1>Checkout Page</h1>
         </>
-    )
-}
+    );
+};
+
+export default Checkout;

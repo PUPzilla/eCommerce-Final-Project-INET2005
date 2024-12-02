@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import React from "react";
 
-export default function Details(){
+const Details = () => {
     return(
         <>
         <h1>Details Page</h1>
         </>
-    )
-}
+    );
+};
+
+export default Details;

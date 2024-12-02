@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import React from "react";
 
-export default function Confirmation(){
+const Confirmation = () => {
     return(
         <>
-        <h1>Confirmation Route</h1>
+        <h1>Confirmation Page</h1>
         </>
-    )
-}
+    );
+};
+
+export default Confirmation;

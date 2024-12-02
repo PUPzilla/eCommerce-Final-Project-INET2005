@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import React from "react";
 
-export default function Signout(){
+const Signup = () => {
     return(
         <>
-        <h1>Signup Route</h1>
+        <h1>Signup Page</h1>
         </>
-    )
-}
+    );
+};
+
+export default Signup;

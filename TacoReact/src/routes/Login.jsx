@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import React from "react";
 
-export default function Login(){
+const Login = () => {
     return(
         <>
-        <h1>Login Route</h1>
+        <h1>Login Page</h1>
         </>
-    )
-}
+    );
+};
+
+export default Login;

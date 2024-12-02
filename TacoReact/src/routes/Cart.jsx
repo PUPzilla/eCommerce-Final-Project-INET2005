@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import React from "react";
 
-export default function Cart(){
+const Cart = () => {
     return(
         <>
-        <h1>Cart Route</h1>
+        <h1>Cart Page</h1>
         </>
-    )
-}
+    );
+};
+
+export default Cart;

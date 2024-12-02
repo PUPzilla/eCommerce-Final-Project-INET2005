@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import React from "react";
 
-export default function Logout(){
+const Logout = () => {
     return(
         <>
-        <h1>Logout Route</h1>
+        <h1>Logout Page</h1>
         </>
-    )
-}
+    );
+};
+
+export default Logout;
