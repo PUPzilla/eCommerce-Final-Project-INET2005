@@ -50,7 +50,7 @@ const router = createBrowserRouter([
         element: <Confirmation />
       }
     ]
-  }
+  },
 ]);
 
 createRoot(document.getElementById('root')).render(

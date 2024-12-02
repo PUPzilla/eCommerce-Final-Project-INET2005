@@ -1,7 +1,10 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import Card from '../ui/card';
 
 export default function Home() {
+    
     //  Display all products
 
     const [products, setProd] = useState([]);
@@ -30,11 +33,11 @@ export default function Home() {
     return(
         <>
             <h1>Home Page</h1>
-            <h2>Products</h2>
+            <h2>All products</h2>
             {
                 products.length > 0 ?
-                products.map((prod) => (
-                    <Card key={prod.id} prod={prod} apiHost={apiHost} showLinks={true}/>
+                products.map((product) => (
+                    <Card key={product.id} product={product} apiHost={apiHost} showLinks={true}/>
                 )) :
                 <p>No products available.</p>
             }
