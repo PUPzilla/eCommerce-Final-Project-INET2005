@@ -7,17 +7,12 @@ export default function Card(props){
                 <div className="d-flex align-items-center position-relative">
                     <img src={`${props.apiHost}/images/${props.product.filename}`} className="thumbnail"/>
                     <div className="prod-info">
-                        <h5 className="card-title">{ props.product.name}</h5>
+                        <h5 className="card-title">{ props.product.name }</h5>
                         <h6>{ props.product.trim }</h6>
                         <p className="card-text">
                             { props.product.name }<br />Cost: { props.product.cost }
                         </p>
                     </div>
-                    { props.showLinks && 
-                        <div>
-                            <Link to={`/details/${props.product.product_id}`} className="btn btn-sm">Details</Link>&nbsp;
-                        </div>
-                    }
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Card from '../ui/card';
+import { Link } from "react-router-dom";
 
 export default function Home() {
     
@@ -9,7 +9,7 @@ export default function Home() {
 
     const [products, setProd] = useState([]);
     const apiHost = import.meta.env.VITE_API_HOST;
-    const apiUrl = apiHost + "/all";
+    const apiUrl = apiHost + "/api/products/all";
 
     useEffect(() => {
         async function fetchData() {
@@ -37,7 +37,10 @@ export default function Home() {
             {
                 products.length > 0 ?
                 products.map((product) => (
-                    <Card key={product.id} product={product} apiHost={apiHost} showLinks={true}/>
+                    <div key={product.product_id}>
+                        <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={true}/>
+                        <Link to={`/details/${product.product_id}`} className="btn btn-sm">Details</Link>&nbsp;
+                    </div>
                 )) :
                 <p>No products available.</p>
             }

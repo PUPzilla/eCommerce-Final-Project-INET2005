@@ -18,16 +18,16 @@ ProdRouter.get('/all', async (req, res) => {
 });
 
 //  Display product by its ID#
-ProdRouter.get('/:id', async (req, res) => {
+ProdRouter.get('/details/:id', async (req, res) => {
     const id = req.params.id;
 
     if(isNaN(id)){
-        return req.status(400).json({ message: 'Invalid ID #.'});
+        return res.status(400).json({ message: 'Invalid ID #.'});
     }
 
     const product = await prisma.product.findUnique({
         where: {
-            id: parseInt(id),
+            product_id: parseInt(id),
         },
     });
 
