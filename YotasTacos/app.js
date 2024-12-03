@@ -4,7 +4,6 @@ import cors from 'cors';
 import session from 'express-session';
 import ProdRouter from './routes/products.js';
 // import UserRouter from './routes/users.js';
-import cookies from 'react-cookies';
 
 const port = process.env.PORT || 3000;
 const app = express();
