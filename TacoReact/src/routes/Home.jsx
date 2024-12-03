@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import Card from '../ui/card';
-import { Link } from "react-router-dom";
 
 export default function Home() {
     
@@ -39,7 +38,6 @@ export default function Home() {
                 products.map((product) => (
                     <div key={product.product_id}>
                         <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={true}/>
-                        <Link to={`/details/${product.product_id}`} className="btn btn-sm">Details</Link>&nbsp;
                     </div>
                 )) :
                 <p>No products available.</p>
