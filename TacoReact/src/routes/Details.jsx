@@ -12,16 +12,20 @@ export default function Details() {
     const [product, setProd] = useState(null);
     const apiHost = import.meta.env.VITE_API_HOST;
     const apiUrl = apiHost + `/api/products/${id}`;
-    const [cookies, setCookie] = useCookies(['cartItems']);
+
+    const [cookies, setCookie, removeCookie] = useCookies(['cartItems']);
 
     function addProduct(product_id) {
-        try{
-            const cart = JSON.stringify(cookies.cartItems) ? JSON.parse(cookies.cartItems) : [];
-            cart.push(product_id);
-            setCookie('cartItems', JSON.stringify(cart), { maxAge: 7200 }); //  Cookie for cart will last 2 hours
-        } catch(err) {
-            console.error("Error adding product to cart: ", err);
+        if(cookies.cartItems){
+            setCookie('cartItems', cookies.cartItems + ',' + product_id, { maxAge: 3600 });
+            console.log(`Updated Cart: ${cookies.cartItems}`);
+        } else {
+            setCookie('cartItems', product_id, { maxAge: 3600 });
         }
+    }
+
+    function deleteCart(){
+        removeCookie('cartItems');
     }
 
     useEffect(() => {
@@ -68,7 +72,7 @@ export default function Details() {
                     <p>Description: {product.description}</p>
                     <p>Cost: {product.cost}</p>
                     <div>                        
-                        <Link to="/cart" onClick={() => addProduct(product_id)}>Add to Cart</Link>
+                        <Link to="/cart" onClick={() => addProduct(product.product_id)}>Add to Cart</Link>
                         <br/>
                         <Link to="/" className="btn btn-primary">Go Back</Link>
                     </div>
