@@ -31,7 +31,7 @@ export default function Home() {
 
     return(
         <>
-            <h1>Home Page</h1>
+            <h1>Home</h1>
             <h2>All products</h2>
             {
                 products.length > 0 ?

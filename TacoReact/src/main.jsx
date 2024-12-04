@@ -11,6 +11,7 @@ import Home from './routes/Home';
 import Login from './routes/Login';
 import Logout from './routes/Logout';
 import Signup from './routes/Signup';
+import './index.css';
 
 const router = createBrowserRouter([
   {

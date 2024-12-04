@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function NavBar() {
     return (
         <nav>
-            <div>Yota's Tacos: Offroading and Overland Equipment</div>
+            <h1>Yota's Tacos: Offroading and Overland Equipment</h1>
             <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/login">Login</Link></li>
