@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useCookies } from 'react-cookie';
 import Card from '../ui/card';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
     const [products, setProducts] = useState([]);
@@ -81,6 +82,9 @@ export default function Cart() {
             </div>
             <div>
                 <h3>Total Cost: ${totalCost}</h3>
+                <Link to='/checkout'>Complete Purchase</Link>
+                <br/>
+                <Link to='/'>Continue Shopping</Link>
             </div>
         </>
     );
