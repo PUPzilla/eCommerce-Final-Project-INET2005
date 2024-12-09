@@ -72,8 +72,8 @@ export default function Details() {
                     <p>Description: {product.description}</p>
                     <p>Cost: {product.cost}</p>
                     <div>                        
-                        <Link to="/" onClick={() => addProduct(product.product_id)}>Add to Cart</Link>
-                        <br/>
+                        <Link to="/" className="btn btn-primary" onClick={() => addProduct(product.product_id)}>Add to Cart</Link>
+                        <br/><br/>
                         <Link to="/" className="btn btn-primary">Go Back</Link>
                     </div>
                 </div>
