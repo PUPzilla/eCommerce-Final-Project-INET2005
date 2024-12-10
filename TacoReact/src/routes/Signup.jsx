@@ -5,25 +5,22 @@ import '../index.css';
 
 export default function Signup () {
     const apiHost = import.meta.env.VITE_API_HOST;
-    const apiUrl = `${apiHost}/api/signup`;
+    const apiUrl = `${apiHost}/api/users/signup`;
 
     const { register, handleSubmit, formState: { errors }, } = useForm();
-    const [errorMsg, setErrorMsg] = useState(null);
-    const [succMsg, setSuccMsg] = useState(null);
 
     function addNewUser(data){
         try{
             console.log(data);
 
             const formData = {
-                firstName: data.firstName,
-                lastName: data.lastName,
+                first_name: data.firstName,
+                last_name: data.lastName,
                 email: data.email,
                 password: data.password,
             };
             
             async function postData(){
-                try{
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json'},
@@ -32,20 +29,15 @@ export default function Signup () {
 
                     if(!response.ok){
                         throw new Error('Failed to fetch the signup API.');
+                    } else {
+                        setTimeout(() => (window.location.href = '/'), 2000);
                     }
                     
-                    setSuccMsg('Signup complete. Redirecting to \'Home\'.');
-                    setTimeout(() => (window.location.href = '/'), 2000);
-
-                } catch(err) {
-                    setErrorMsg(err.message);
                 }
-            }
 
             postData();
-
-        } catch(err) {
-            console.error(err);
+        } catch(errors) {
+            console.error(errors.message);
         }
     }
 

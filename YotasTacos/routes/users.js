@@ -100,8 +100,12 @@ UserRouter.post('/login', async (req, res) => {
 
 //  Logout route
 UserRouter.post('/logout', (req, res) => {
-    req.session.destroy();
-    res.send('Logged Out.');
+    if(req.session.customer_id){
+        req.session.destroy(window.location.href='/');
+        res.send('Logged Out.');
+    } else {
+        res.status(401).send('Not logged in.');
+    }
 });
 
 //  Get session

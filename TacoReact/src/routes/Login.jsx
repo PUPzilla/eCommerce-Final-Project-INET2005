@@ -5,9 +5,9 @@ import "../index.css";
 
 export default function Login() {
     const apiHost = import.meta.env.VITE_API_HOST;
-    const apiUrl = `${apiHost}/api/login`;
+    const apiUrl = `${apiHost}/api/users/login`;
 
-    const [ loginfail, setLoginFail ] = useState(null);
+    const [ loginfail, setLoginFail ] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
 
     async function loginUser(data){
@@ -22,23 +22,20 @@ export default function Login() {
                 body: JSON.stringify(data),
                 credentials: 'include'
             });
-
             if(!response.ok){
                 setLoginFail(true);
             }
-
             window.location.href = '/';
 
         } catch(err){
 
         }
     }
-
     return(
         <>
         <h1>Login Page</h1>
         {loginfail && <p className="text-danger">Incorrect email address or password</p>}
-        <form onSubmit={handleSubmit} method="post" className="w-25">
+        <form onSubmit={handleSubmit(loginUser)} method="post" className="w-25">
             <div className="mb-3">
                 <label className="form-label">Email</label>
                 <input {...register("email", { required: "Email is required." })} type="text" className="form-control bg-light" />
@@ -52,7 +49,7 @@ export default function Login() {
             <button type="submit" className="btn btn-primary">Login</button>
             <Link to="/" className="btn btn-outline-dark ms-2">Cancel</Link>            
         </form>
-        <p className="mt-4">Don't have an account?<Link to="/signup">Sign-up</Link> today.</p> 
+        <p className="mt-4">Don't have an account? <Link to="/signup">Sign-up</Link> today.</p>
         </>
     );
 };
