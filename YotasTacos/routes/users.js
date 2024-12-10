@@ -44,7 +44,10 @@ UserRouter.post('/signup', async (req, res) => {
 
     // Validate password with 'schema'
     if(!schema.validate(password)){
-        return res.send('The entered password does not meet the requirements.');
+        return res.status(400).send({
+            message: 'The entered password does not meet the requirements.',
+            reasons: schema.validate(password, {list: true}),
+        });
     }
 
     //  Hash password before saving
@@ -80,7 +83,7 @@ UserRouter.post('/login', async (req, res) => {
 
     //  If user already exists
     if(!existingUser) {
-        return res._construct(404).send('This Email is not linked to an existing account.');
+        return res.status(404).send('This Email is not linked to an existing account.');
     }
 
     //  If valid email, verify the password

@@ -11,6 +11,7 @@ export default function Card(props){
                     <img src={`${apiHost}/images/${product.filename}`} className="thumbnail"/>
 
                     <div className="prod-info">
+                    <br/>
                         <h5 className="card-title">{ product.name }</h5>
                         <p className="card-text">
                             Cost: ${ product.cost }

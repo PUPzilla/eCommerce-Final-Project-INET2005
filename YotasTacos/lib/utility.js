@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import express from 'express';
 
 //  Hash password
 async function hashPassword(plaintextPassword) {

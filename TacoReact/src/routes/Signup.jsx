@@ -1,39 +1,49 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import '../index.css';
 
 export default function Signup () {
-
     const apiHost = import.meta.env.VITE_API_HOST;
     const apiUrl = `${apiHost}/api/signup`;
 
     const { register, handleSubmit, formState: { errors }, } = useForm();
+    const [errorMsg, setErrorMsg] = useState(null);
+    const [succMsg, setSuccMsg] = useState(null);
 
     function addNewUser(data){
         try{
             console.log(data);
 
-            const formData = new FormData();
-            formData.append('firstName', data.firstName);
-            formData.append('lastName', data.lastName);
-            formData.append('email', data.email);
-            formData.append('password', data.password);
+            const formData = {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                password: data.password,
+            };
             
             async function postData(){
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    body: formData,
-                });
+                try{
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json'},
+                        body: JSON.stringify(formData),
+                    });
 
-                if(!response.ok){
-                    throw new Error('Failed to fetch the signup API.');
-                } else {
-                    window.location.href = '/';
-                }                
-            }            
-        
+                    if(!response.ok){
+                        throw new Error('Failed to fetch the signup API.');
+                    }
+                    
+                    setSuccMsg('Signup complete. Redirecting to \'Home\'.');
+                    setTimeout(() => (window.location.href = '/'), 2000);
+
+                } catch(err) {
+                    setErrorMsg(err.message);
+                }
+            }
+
             postData();
-            
+
         } catch(err) {
             console.error(err);
         }
@@ -57,14 +67,14 @@ export default function Signup () {
 
                 <div className="mb-3">
                     <label className="form-label">Email Address</label>
-                    <input {...register("email", {required: "A valid email address is required", validate: { validFormat: value => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || "Invalid email address."}})} type="text" className="form-controlbg-light" />
-                    {errors.email && <span className="text-danger">An email is required.</span>}
+                    <input {...register("email", {required: "A valid email address is required", validate: { validFormat: value => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || "Invalid email address."}})} type="text" name="email" className="form-control bg-light"/>
+                    {errors.email && <span className="text-danger">{errors.email.message}</span>}
                 </div>
                 
                 <div className="mb-3">
                     <label className="form-label">Password</label>
-                    <input {...register("password", {required: true})} type="text" name="password" className="form-control bg-light"/>
-                    {errors.password && <span className="text-danger">A valid password is required.<br></br>Your password must be more than 8 but less than 24 chars long, contain at least 1 uppercase, 1 lowercase, and 1 digit.</span>}
+                    <input {...register("password", {required: true})} type="password" name="password" className="form-control bg-light"/>
+                    {errors.password && <span className="text-danger">A valid password is required.<br />Your password must be between 8-24 characters long, include at least one uppercase letter, one lowercase letter, and one digit.</span>}
                 </div>
 
                 <button type="submit" className="btn btn-primary">Submit</button>
