@@ -16,17 +16,17 @@ export default function Logout() {
                 });
 
                 if (!response.ok) {
-                    throw new Error("Failed to log out. Please try again.");
+                    throw new Error("Failed to log out. Network fetch request failed.");
                 }
                 setStatus("Logged out successfully.");
                 setTimeout(() => {
                     navigate("/"); // Redirect to the homepage after logout
-                }, 2000);
+                }, 200);
             } catch (error) {
                 console.error("An error occurred while logging you out. Please try again.", error);
+                setStatus(error.message);
             }
         }
-
         logout();
     }, [apiUrl, navigate]);
 

@@ -8,7 +8,7 @@
   padding: 25px;
   text-align: center;
   animation: gradient 15s ease infinite;
-  background-image: linear-gradient(10deg,red 25%,violet 50%, purple 75%);
+  background-image: linear-gradient(10deg,orange 25%,violet 50%, purple 75%);
   background-size: 400% 400%;
   height: 100%;
   width: 100%;

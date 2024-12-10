@@ -13,9 +13,12 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-const corsOptions = { origin: 'http://localhost:5173', credentials: true };
-app.use(cors(corsOptions));
+const corsOptions = { 
+  origin: 'http://localhost:5173', 
+  credentials: true,
+};
 
+app.use(cors(corsOptions));
 
 app.use(session({
   secret: 'qwerty',
