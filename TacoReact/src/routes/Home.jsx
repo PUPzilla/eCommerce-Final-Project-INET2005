@@ -31,8 +31,7 @@ export default function Home() {
 
     return(
         <>
-            <h1>Home</h1>
-            <h2>All products</h2>
+            <h1>All products</h1>
             {
                 products.length > 0 ?
                 products.map((product) => (

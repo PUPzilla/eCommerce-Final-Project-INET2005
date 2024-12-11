@@ -12,9 +12,10 @@ export default function Logout() {
             try {
                 const response = await fetch(apiUrl, {
                     method: "POST",
-                    credentials: "include", // Include cookies for session handling
+                    credentials: "include",
                 });
-
+                console.log("Request Headers:", response.headers);
+                console.log("Request Status:", response.status);
                 if (!response.ok) {
                     throw new Error("Failed to log out. Network fetch request failed.");
                 }

@@ -16,23 +16,26 @@ export default function Cart() {
         if (cookies.cartItems && typeof cookies.cartItems === 'string') {
             return cookies.cartItems
                 .split(',')
-                .map(id => parseInt(id, 10))
-                .filter(id => !isNaN(id));
+                .map(id => parseInt(id, 10)) // Convert string IDs to integers
+                .filter(id => !isNaN(id));  // Filter out invalid numbers
         }
         return [];
     }, [cookies.cartItems]);
+    
 
     // Create an object to store the quantity of each product ID
     const productQuantities = useMemo(() => {
         return productIdArray.reduce((acc, productId) => {
-            acc[productId] = (acc[productId] || 0) + 1;
+            acc[productId] = (acc[productId] || 0) + 1; // Increment count
             return acc;
         }, {});
     }, [productIdArray]);
+    
 
     useEffect(() => {
         async function fetchProducts() {
             try {
+                console.log('Fetching products for IDs:', Object.keys(productQuantities));
                 const fetchedProducts = await Promise.all(
                     Object.keys(productQuantities).map(async (productId) => {
                         const response = await fetch(`${apiHost}/api/products/${productId}`);
@@ -43,18 +46,22 @@ export default function Cart() {
                         return { ...product, quantity: productQuantities[productId] };
                     })
                 );
+                console.log('Fetched products:', fetchedProducts);
                 setProducts(fetchedProducts);
                 setError(null);
             } catch (err) {
+                console.error('Error in fetchProducts:', err);
                 setError("An error occurred while fetching products.");
-                console.error(err);
             }
         }
-
+    
         if (productIdArray.length > 0) {
             fetchProducts();
+        } else {
+            console.log('No product IDs found in cart.');
         }
     }, [productIdArray, productQuantities, apiHost]);
+    
 
     const totalCost = useMemo(() => {
         return products.reduce((total, product) => {
@@ -69,16 +76,20 @@ export default function Cart() {
                 <h2>Products in Cart</h2>
                 {error && <p style={{ color: "red" }}>{error}</p>}
                 {products.length > 0 ? (
-                    products.map((product) => (
-                        <div key={product.product_id}>
-                            <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={false}/>
-                            <p>Quantity: {product.quantity}</p>
-                            <p>Total: ${product.cost * product.quantity}</p>
-                        </div>
-                    ))
+                    products.map((product) => {
+                        console.log('Rendering product:', product); // Debug log
+                        return (
+                            <div key={product.product_id}>
+                                <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={false}/>
+                                <p>Quantity: {product.quantity}</p>
+                                <p>Total: ${product.cost * product.quantity}</p>
+                            </div>
+                        );
+                    })
                 ) : (
                     <p>No products available in your cart.</p>
                 )}
+
             </div>
             <div>
                 <h3>Total Cost: ${totalCost}</h3>

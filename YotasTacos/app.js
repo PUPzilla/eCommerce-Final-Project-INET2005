@@ -8,28 +8,27 @@ import UserRouter from './routes/users.js';
 const port = process.env.PORT || 3000;
 const app = express();
 
-//  Middleware
-app.use(express.json());
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-const corsOptions = { 
-  origin: 'http://localhost:5173', 
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-
 app.use(session({
-  secret: 'qwerty',
+  name: 'sessionCookie',
+  secret: 'secret',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
     httpOnly: true,
     secure: false,
     sameSite: 'lax',
     maxAge: 3600000
   }
+}));
+
+//  Middleware
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
 }));
 
 //  Routes

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useCookies } from 'react-cookie';
+import Card from "../ui/card.jsx";
 
 export default function Details() {
     
@@ -13,7 +14,7 @@ export default function Details() {
     const apiHost = import.meta.env.VITE_API_HOST;
     const apiUrl = apiHost + `/api/products/${id}`;
 
-    const [cookies, setCookie, removeCookie] = useCookies(['cartItems']);
+    const [cookies, setCookie] = useCookies(['cartItems']);
 
     function addProduct(product_id) {
         if(cookies.cartItems){
@@ -23,11 +24,7 @@ export default function Details() {
             setCookie('cartItems', product_id, { maxAge: 3600 });
         }
     }
-
-    function deleteCart(){
-        removeCookie('cartItems');
-    }
-
+    
     useEffect(() => {
 
         let mounted = true;
@@ -67,15 +64,12 @@ export default function Details() {
             { error ? (
                 <p>{error}</p>
             ) : product ? (
-                <div>
-                    <h2>{product.name}</h2>
-                    <p>Description: {product.description}</p>
-                    <p>Cost: {product.cost}</p>
-                    <div>                        
-                        <Link to="/" className="btn btn-primary" onClick={() => addProduct(product.product_id)}>Add to Cart</Link>
-                        <br/><br/>
-                        <Link to="/" className="btn btn-primary">Go Back</Link>
-                    </div>
+                <div key={product.product_id}>
+                    <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={false}>{product}</Card>
+                    <Link to="/" className="btn btn-primary" onClick={() => addProduct(product.product_id)}>Add to Cart</Link>
+                    <br/>
+                    <br/>
+                    <Link to="/" className="btn btn-primary">Go Back</Link>
                 </div>
             ) : (
                 <p>Loading...</p>

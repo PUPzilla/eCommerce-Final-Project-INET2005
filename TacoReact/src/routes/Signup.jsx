@@ -8,14 +8,15 @@ export default function Signup () {
     const apiUrl = `${apiHost}/api/users/signup`;
 
     const { register, handleSubmit, formState: { errors }, } = useForm();
+    const [status, setStatus] = useState("Create a new user profile.");
 
     function addNewUser(data){
         try{
             console.log(data);
 
             const formData = {
-                first_name: data.firstName,
-                last_name: data.lastName,
+                first_name: data.first_name,
+                last_name: data.last_name,
                 email: data.email,
                 password: data.password,
             };
@@ -30,6 +31,7 @@ export default function Signup () {
                     if(!response.ok){
                         throw new Error('Failed to fetch the signup API.');
                     } else {
+                        setStatus("User created successfully.");
                         setTimeout(() => (window.location.href = '/'), 2000);
                     }
                     
@@ -43,18 +45,18 @@ export default function Signup () {
 
     return(
         <>
-            <h1>Create a new profile</h1>
+            <h1>{status}</h1>
             <form onSubmit={handleSubmit(addNewUser)} method="post" encType="multipart/form-data">
                 <div className="mb-3">
                     <label className="form-label">First Name</label>
-                    <input {...register("firstName", {required: true})} type="text" name="firstName" className="form-control bg-light"/>
-                    {errors.firstName && <span className="text-danger">A first name is required.</span>}
+                    <input {...register("first_name", {required: true})} type="text" name="first_name" className="form-control bg-light"/>
+                    {errors.first_name && <span className="text-danger">A first name is required.</span>}
                 </div>
 
                 <div className="mb-3">
                     <label className="form-label">Last Name</label>
-                    <input {...register("lastName", {required: true})} type="text" name="lastName" className="form-control bg-light"/>
-                    {errors.lastName && <span className="text-danger">A last name is required.</span>}
+                    <input {...register("last_name", {required: true})} type="text" name="last_name" className="form-control bg-light"/>
+                    {errors.last_name && <span className="text-danger">A last name is required.</span>}
                 </div>
 
                 <div className="mb-3">
@@ -70,7 +72,7 @@ export default function Signup () {
                 </div>
 
                 <button type="submit" className="btn btn-primary">Submit</button>
-                <Link to="/" className="btn btn-outline-secondary ms-3">Cancel</Link>
+                <Link to="/" className="btn btn-danger ms-3">Cancel</Link>
             </form>
         </>
     )

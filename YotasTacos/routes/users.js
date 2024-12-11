@@ -28,7 +28,7 @@ UserRouter.post('/signup', async (req, res) => {
 
     //  Validate
     if(!email || !password || !first_name || !last_name) {
-        return res.status(400).send('Missing one or more required fields.');
+        return res.status(400).json('Missing one or more required fields.');
     }
 
     //  Check for existing users
@@ -39,12 +39,12 @@ UserRouter.post('/signup', async (req, res) => {
     });
 
     if(existingUser) {
-        return res.status(400).send('This user already exists.');
+        return res.status(400).json('This user already exists.');
     }
 
     // Validate password with 'schema'
     if(!schema.validate(password)){
-        return res.status(400).send({
+        return res.status(400).json({
             message: 'The entered password does not meet the requirements.',
             reasons: schema.validate(password, {list: true}),
         });
@@ -71,7 +71,7 @@ UserRouter.post('/login', async (req, res) => {
 
     //  Validate input
     if(!email || !password){
-        return res.status(400).send('Missing a required field.');
+        return res.status(400).json('Missing a required field.');
     }
 
     //  Check that user exists
@@ -83,37 +83,41 @@ UserRouter.post('/login', async (req, res) => {
 
     //  If user already exists
     if(!existingUser) {
-        return res.status(404).send('This Email is not linked to an existing account.');
+        return res.status(404).json('This Email is not linked to an existing account.');
     }
 
     //  If valid email, verify the password
     const passwordMatch = await comparePassword(password, existingUser.password);
     if(!passwordMatch) {
-        return res.status(401).send('Invalid Password');
+        return res.status(401).json('Invalid Password');
     }
 
     //  Setup user session
     req.session.customer_id = existingUser.customer_id;
 
-    res.json({ message: 'Legged in as: ', customer_id: req.session.customer_id });
+    res.json({ message: 'Logged in as: ', customer_id: req.session.customer_id });
 });
 
 //  Logout route
 UserRouter.post('/logout', (req, res) => {
-    if(req.session.customer_id){
-        req.session.destroy();
-        res.send('Logged Out.');
-    } else {
-        res.status(401).send('Not logged in.');
-    }
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Failed to destroy session:", err);
+            return res.status(500).json("Failed to log out.");
+        }
+        res.clearCookie('sessionCookie');
+        console.log("Session destroyed, cookie cleared.");
+        res.status(200).json("Logged out successfully.");
+    });
 });
+
 
 //  Get session
 UserRouter.get('/getsession/:id', (req, res) => {
-    if(req.session.customer){
-        res.json({'user' : req.session.customer});
+    if(req.session.customer_id){
+        res.json({'user' : req.session.customer_id});
     } else {
-        res.status(401).send('Not logged in.');
+        res.status(401).json('Not logged in.');
     }
 });
 

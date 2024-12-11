@@ -47,7 +47,7 @@ export default function Login() {
                 {errors.password && <span className="text-danger">{errors.password.message}</span>}
             </div>
             <button type="submit" className="btn btn-primary">Login</button>
-            <Link to="/" className="btn btn-outline-dark ms-2">Cancel</Link>            
+            <Link to="/" className="btn btn-danger ms-3">Cancel</Link>
         </form>
         <p className="mt-4">Don't have an account? <Link to="/signup">Sign-up</Link> today.</p>
         </>
