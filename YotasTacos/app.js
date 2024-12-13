@@ -8,31 +8,32 @@ import UserRouter from './routes/users.js';
 const port = process.env.PORT || 3000;
 const app = express();
 
+//  Middleware
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+//  CORS setup
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
+
+//  Session setup
 app.use(session({
-  name: 'sessionCookie',
-  secret: 'secret',
+  secret: 'birds-arent-real',
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
     secure: false,
     sameSite: 'lax',
-    maxAge: 3600000
+    maxAge: 3600000 //  1hr in millisecs
   }
 }));
 
-//  Middleware
-app.use(express.json());
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}));
-
 //  Routes
-//  Products
 app.use('/api/products', ProdRouter);
 app.use('/api/users', UserRouter);
 

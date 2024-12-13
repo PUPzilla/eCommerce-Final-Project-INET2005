@@ -14,10 +14,8 @@ export default function Cart() {
     // Safely calculate productIdArray using useMemo to avoid unnecessary re-calculations
     const productIdArray = useMemo(() => {
         if (cookies.cartItems && typeof cookies.cartItems === 'string') {
-            return cookies.cartItems
-                .split(',')
-                .map(id => parseInt(id, 10)) // Convert string IDs to integers
-                .filter(id => !isNaN(id));  // Filter out invalid numbers
+            console.log('Product ID Array contents: ', productIdArray);
+            return cookies.cartItems.split(',').map(id => parseInt(id, 10)).filter(id => !isNaN(id));
         }
         return [];
     }, [cookies.cartItems]);
@@ -27,6 +25,7 @@ export default function Cart() {
     const productQuantities = useMemo(() => {
         return productIdArray.reduce((acc, productId) => {
             acc[productId] = (acc[productId] || 0) + 1; // Increment count
+            console.log('Product quantities: ', productQuantities);
             return acc;
         }, {});
     }, [productIdArray]);
@@ -55,7 +54,7 @@ export default function Cart() {
             }
         }
     
-        if (productIdArray.length > 0) {
+        if (cookies.cartItems.length > 0) {
             fetchProducts();
         } else {
             console.log('No product IDs found in cart.');

@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import NavBar from './ui/Nav';
 import './index.css';
 
-const App = () => {
+export default function App() {
+
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   return (
     <>
       <div>
-        <NavBar />
+        <NavBar isLoggedIn={isLoggedIn} />
         <main>
-        <Outlet />
+        <Outlet context={setLoggedIn} />
         </main>
       </div>
     </>
   );
 };
-
-export default App;

@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 export default function Logout() {
     const apiHost = import.meta.env.VITE_API_HOST;
     const apiUrl = `${apiHost}/api/users/logout`;
     const [status, setStatus] = useState("Logging out...");
     const navigate = useNavigate();
+
+    const setLoggedIn = useOutletContext();
 
     useEffect(() => {
         async function logout() {
@@ -20,6 +23,7 @@ export default function Logout() {
                     throw new Error("Failed to log out. Network fetch request failed.");
                 }
                 setStatus("Logged out successfully.");
+                setLoggedIn(false);
                 setTimeout(() => {
                     navigate("/"); // Redirect to the homepage after logout
                 }, 200);

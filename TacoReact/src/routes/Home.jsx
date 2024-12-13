@@ -31,16 +31,15 @@ export default function Home() {
 
     return(
         <>
-            <h1>All products</h1>
+            <div className="home-products">
             {
                 products.length > 0 ?
                 products.map((product) => (
-                    <div key={product.product_id}>
-                        <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={true}/>
-                    </div>
+                    <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={true}/>
                 )) :
                 <p>No products available.</p>
             }
+            </div>
         </>
     );
 };

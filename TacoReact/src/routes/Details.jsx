@@ -60,20 +60,22 @@ export default function Details() {
 
     return(
         <>
-            <h1>Details Page</h1>
             { error ? (
                 <p>{error}</p>
             ) : product ? (
-                <div key={product.product_id}>
-                    <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={false}>{product}</Card>
-                    <Link to="/" className="btn btn-primary" onClick={() => addProduct(product.product_id)}>Add to Cart</Link>
-                    <br/>
-                    <br/>
-                    <Link to="/" className="btn btn-primary">Go Back</Link>
-                </div>
-            ) : (
-                <p>Loading...</p>
-            )}
+                <>
+                    <h1 className="details-head">More details</h1>
+                    <div key={product.product_id} className="prod-desc">
+                        <Card key={product.product_id} product={product} apiHost={apiHost} showLinks={false} showDesc={true}>{product}</Card>
+                        <Link to="/" className="btn btn-primary" onClick={() => addProduct(product.product_id)}>Add to Cart</Link>
+                        <br />
+                        <br />
+                        <Link to="/" className="btn btn-primary">Go Back</Link>
+                    </div>
+                    </>
+                ) : (
+                    <p>Loading...</p>
+                )}
         </>
     );
 }

@@ -94,8 +94,11 @@ UserRouter.post('/login', async (req, res) => {
 
     //  Setup user session
     req.session.customer_id = existingUser.customer_id;
-
-    res.json({ message: 'Logged in as: ', customer_id: req.session.customer_id });
+    req.session.email = existingUser.customer_id;
+    req.session.name = `${existingUser.first_name} ${existingUser.last_name}`;
+    
+    console.log(`Logged in as: ${req.session.email}`);
+    res.json({ message: `Logged in as: ${req.session.name}` });
 });
 
 //  Logout route
